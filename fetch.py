@@ -30,7 +30,7 @@ params = {
 }
 response = requests.get(url, params=params)
 data = response.json()['entry_list']
-
+# print(data)
 
 def get_user_details(data):
     details = []
