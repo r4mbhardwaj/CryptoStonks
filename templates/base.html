@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="black">
+
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- The page supports both dark and light color schemes,
+         and the page author prefers / default is light. -->
+    <meta name="color-scheme" content="light dark">
+    <title>{% block title %}Crypto Price Tracker{% endblock title %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.42.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- From UNPKG -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/@tailwindcss/typography@0.4.x/dist/typography.min.css" /> -->
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- icon -->
+    <link rel="icon" href="{% static 'icons/logo.png' %}" type="image/x-icon" />
+    {% block extrahead %}{% endblock %}
+</head>
+
+<body>
+    <div class="drawer drawer-mobile drawer-mobile-end">
+        <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+            <div class="
+            sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-40 backdrop-blur transition-all duration-100 
+            bg-base-100 text-base-content shadow
+            ">
+                <!-- Navbar -->
+                <div class="w-full navbar">
+                    <div class="flex-none lg:hidden">
+                        <label for="my-drawer-3" class="btn btn-square btn-ghost">
+                            <i class="material-icons">menu</i>
+                        </label>
+                    </div>
+                    <div class="flex-1 px-2 mx-2">
+                        <a class="btn btn-ghost normal-case text-xl"
+                            href="{% block default_home_url %}/{% endblock default_home_url %}">
+                            {% block branding %} Crypto Price Tracker {% endblock %}
+                        </a>
+                    </div>
+                    <div class="flex-none hidden lg:block">
+                        <ul class="menu menu-horizontal">
+                            <!-- Navbar menu content here -->
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mx-auto px-4 py-2">
+                {% block body %}
+                <h1>Prices</h1>
+                {% endblock body %}
+                </article>
+            </div>
+        </div>
+        <div class="drawer-side">
+            <label for="my-drawer-3" class="drawer-overlay"></label>
+            <ul class="menu p-4 w-80 bg-base-200">
+                <!-- Sidebar content here -->
+                {% if user.is_authenticated %}
+                <div class="text-center">
+                    <div class="avatar placeholder">
+                        <div class="bg-neutral-focus text-neutral-content rounded-full w-24">
+                            <span class="text-3xl">{{user.username|slice:1}}</span>
+                        </div>
+                    </div>
+                    <p>@{{user.username}}</p>
+                </div>
+                {% endif %}
+
+                {% block sidebar_items %}
+
+                {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                <li><a href="/">
+                        <i class="material-icons">auto_mode</i>
+                        Home
+                    </a></li>
+                <li><a href="{% url 'admin:index' %}">
+                        <i class="material-icons">admin_panel_settings</i>
+                        Admin
+                    </a></li>
+                <li><a href="{% url 'schema-swagger-ui' %}">
+                        <i class="material-icons">api</i>
+                        APIs
+                    </a></li>
+                {% endif %}
+
+                <li><a href="{% url 'admin:logout' %}">
+                        <i class="material-icons">logout</i>
+                        Logout
+                    </a></li>
+                {% else %}
+                <li><a href="{% url 'admin:login' %}">
+                        <i class="material-icons">login</i>
+                        Login
+                    </a></li>
+                {% endif %}
+
+                {% endblock sidebar_items %}
+
+            </ul>
+        </div>
+    </div>
+
+    {% for message in messages %}
+    <div class="toast">
+        <div class="alert alert-info">
+            <div>
+                <span>{{message}}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+
+{% block js %}
+{% endblock js %}
+
+
+<style>
+    .scroller {
+        /* make height of full page until the sticky bottom */
+        height: calc(100vh - 9rem);
+        /* scroll */
+        overflow-y: auto;
+    }
+
+    .sticky-bottom {
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+
+</html>

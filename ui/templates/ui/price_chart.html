@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Price Chart for {{ symbol }}</h1>
+<div id="chart"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.23.1/dist/apexcharts.min.js"></script>
+<script>
+    // Fetch price data using AJAX and render the chart
+    function renderChart() {
+        $.ajax({
+            url: '/api/coins/' + '{{ symbol }}' + '/prices/',
+            success: function (data) {
+                var prices = data.map(function (item) {
+                    return item.price_usd;
+                });
+                var timestamps = data.map(function (item) {
+                    var format = item.last_updated; // in 2023-03-04T11:31:37.862618Z format
+                    var datetime = format.split('T'); // split date and time
+                    var date = datetime[0]; // get date
+                    var time = datetime[1].split('.')[0]; // get time
+                    return date + ' ' + time;
+                });
+                console.log(prices)
+
+                // chart for showing the trading price of a cryptocurrency over time
+                var options = {
+                    series: [{
+                        name: 'Price',
+                        data: prices
+                    }],
+                    chart: {
+                        type: 'line',
+                        height: 350
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'straight'
+                    },
+                    title: {
+                        text: 'Price Chart',
+                        align: 'left'
+                    },
+                    grid: {
+                        row: {
+                            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                            opacity: 0.5
+                        },
+                    },
+                    xaxis: {
+                        categories: timestamps,
+                    }
+                };
+
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        renderChart();
+    });
+</script>
+{% endblock %}

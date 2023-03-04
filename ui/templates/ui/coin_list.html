@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Coin List</h1>
+
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Symbol</th>
+        <th>Chart</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for coin in coins %}
+
+      <tr>
+        <th>1</th>
+        <td>{{ coin.name }}</td>
+        <td>{{ coin.symbol }}</td>
+        <td><a class="btn btn-primary" href="{% url 'ui:price_chart' coin.symbol %}">
+          <i class="material-icons">show_chart</i>
+        </a></td>
+
+      </tr>
+
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
